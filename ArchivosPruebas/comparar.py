@@ -1,13 +1,11 @@
 import pandas as pd
 
 def comparar_excels(archivo1, archivo2):
-    # Cargar ambos archivos Excel como diccionarios de hojas
     xls1 = pd.read_excel(archivo1, sheet_name=None, engine='openpyxl')
     xls2 = pd.read_excel(archivo2, sheet_name=None, engine='openpyxl')
 
     diferencias = []
 
-    # Verifica si las hojas son iguales
     hojas1 = set(xls1.keys())
     hojas2 = set(xls2.keys())
     if hojas1 != hojas2:
@@ -19,12 +17,10 @@ def comparar_excels(archivo1, archivo2):
         df1 = xls1[hoja].fillna("").astype(str)
         df2 = xls2[hoja].fillna("").astype(str)
 
-        # Asegurarse que los tamaños son iguales
         if df1.shape != df2.shape:
             diferencias.append(f"Diferente tamaño en hoja '{hoja}': {df1.shape} vs {df2.shape}")
             continue
 
-        # Comparación celda por celda
         for fila in range(df1.shape[0]):
             for col in range(df1.shape[1]):
                 val1 = df1.iat[fila, col]
@@ -33,11 +29,11 @@ def comparar_excels(archivo1, archivo2):
                     diferencias.append(f"Diferencia en hoja '{hoja}' - Fila {fila+1}, Columna {col+1}: '{val1}' ≠ '{val2}'")
 
     if not diferencias:
-        return "✅ Los archivos son iguales."
+        return "Los archivos son iguales."
     else:
-        resultado = "❌ Los archivos son diferentes. Diferencias encontradas:\n"
+        resultado = "Diferencias encontradas:\n"
         resultado += "\n".join(diferencias)
         return resultado
 
-resultado = comparar_excels("PruebasQNodesCambio1_15A-2.xlsx", "PruebasQNodesCambio1_15A.xlsx")
+resultado = comparar_excels("PruebasQNodesN20.xlsx", "PruebasQNodesCambiosFinales_20.xlsx")
 print(resultado)
